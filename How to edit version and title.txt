@@ -1,0 +1,2 @@
+To edit the title of the app edit ./app/src/main/AndroidMainfest.xml
+To edit the version and the bundle identifier edit ./app/build.gradle
