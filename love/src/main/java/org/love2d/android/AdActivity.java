@@ -311,16 +311,16 @@ public class AdActivity extends GameActivity {
 				if (!bannerCreated){
 					Log.d("AdActivity","CreateBanner: \"" + position + "\"");
 					mAdView = new AdView(mSingleton);
-					mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-					
+					mAdView.setAdUnitId(adID);
+
 					//CODE FOR ADAPTIVE BANNER:
 					/*
 					AdSize adSize = getAdSize();
-					
+
 					mAdView.setAdSize(adSize);
 					*/
 					mAdView.setAdSize(AdSize.SMART_BANNER);
-			
+
 
 					adRequest = new AdRequest.Builder()
 					.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
@@ -328,9 +328,9 @@ public class AdActivity extends GameActivity {
 					mAdView.loadAd(adRequest);
 
 					adContainer = new RelativeLayout(mSingleton);
-					
+
 					// Place the ad view.
-					
+
 					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 					params.addRule(RelativeLayout.CENTER_HORIZONTAL);
 					if (position.equals("bottom"))
@@ -342,12 +342,12 @@ public class AdActivity extends GameActivity {
 					{
 						params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 					}
-					
+
 					adContainer.addView(mAdView, params);
-					
+
 					RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 					params2.addRule(RelativeLayout.CENTER_HORIZONTAL);
-					
+
 					if (position.equals("bottom"))
 					{
 						Log.d("AdActivity","Bottom");
@@ -359,7 +359,7 @@ public class AdActivity extends GameActivity {
 						params2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 						adContainer.setGravity(Gravity.TOP);
 					}
-				
+
 
 					mLayout.addView(adContainer,params2);
 
@@ -368,7 +368,7 @@ public class AdActivity extends GameActivity {
 						@Override
 						public void onAdLoaded() {
 							if (bannerVisibile)
-							{	
+							{
 								mAdView.setVisibility(View.GONE);
 								mAdView.setVisibility(View.VISIBLE);
 							}
@@ -379,11 +379,11 @@ public class AdActivity extends GameActivity {
 							Log.d("AdActivity","Banner - onAdLoaded: " + bannerVisibile);
 							bannerHasFinishedLoading = true;
 						}
-						
+
 						@Override
 						public void onAdLeftApplication() {
 							Log.d("AdActivity","adClicked: AdMob Banner");
-			
+
 						}
 					});
 					hasBanner = true;
@@ -393,8 +393,8 @@ public class AdActivity extends GameActivity {
 			}
 		});
 	}
-	
-	private AdSize getAdSize() 
+
+	private AdSize getAdSize()
 	{
 		// Step 2 - Determine the screen width (less decorations) to use for the ad width.
 		Display display = getWindowManager().getDefaultDisplay();
@@ -409,16 +409,16 @@ public class AdActivity extends GameActivity {
 		// Step 3 - Get adaptive ad size and return for setting on the ad view.
 		return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
 	}
-	
-	public void hideBanner() 
+
+	public void hideBanner()
 	{
 		Log.d("AdActivity", "hideBanner");
 
 		runOnUiThread(new Runnable()
 		{
 			@Override
-			public void run() 
-			{ 
+			public void run()
+			{
 
 				if (hasBanner && bannerHasFinishedLoading)
 				{
@@ -437,8 +437,8 @@ public class AdActivity extends GameActivity {
 		runOnUiThread(new Runnable()
 		{
 			@Override
-			public void run() 
-			{ 
+			public void run()
+			{
 
 				if (hasBanner && bannerHasFinishedLoading)
 				{
@@ -451,7 +451,7 @@ public class AdActivity extends GameActivity {
 		});
 	}
 
-	public void requestInterstitial(final String adID) 
+	public void requestInterstitial(final String adID)
 	{
 		Log.d("AdActivity", "requestInterstitial");
 
@@ -459,9 +459,9 @@ public class AdActivity extends GameActivity {
 		{
 			@Override
 			public void run()
-			{ 
+			{
 				mInterstitialAd = new InterstitialAd(mSingleton);
-				mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+				mInterstitialAd.setAdUnitId(adID);
 
 				AdRequest adRequest = new AdRequest.Builder()
 				.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
@@ -471,37 +471,37 @@ public class AdActivity extends GameActivity {
 				mInterstitialAd.setAdListener(new AdListener()
 				{
 					@Override
-					public void onAdClosed() 
+					public void onAdClosed()
 					{
 						interstitialDidClose = true;
 						Log.d("AdActivity", "onInterstitialClosed");
 					}
-					
+
 					@Override
 					public void onAdLoaded()
 					{
 						Log.d("AdActivity", "interstitialDidReceive");
 						interstitialLoaded = true;
 					}
-					
+
 					@Override
-					public void onAdFailedToLoad(int errorCode) 
+					public void onAdFailedToLoad(int errorCode)
 					{
 						Log.d("AdActivity", "onInterstitialFailedToLoad: Error " + errorCode);
 						interstitialDidFailToLoad = true;
 					}
-					
+
 					@Override
 					public void onAdOpened()
 					{
 						interstitialLoaded = false;
 					}
-					
+
 					@Override
 					public void onAdLeftApplication()
 					{
 						Log.d("AdActivity","adClicked: Interstitial");
-						
+
 					}
 				});
 
@@ -509,18 +509,18 @@ public class AdActivity extends GameActivity {
 			}
 		});
 	}
-	
+
 	//Called in isInterstitialLoaded
 	private void updateInterstitialState()
 	{
 		runOnUiThread(new Runnable(){
 			@Override
-			public void run() 
+			public void run()
 			{
 
 				if (hasInterstitial)
 				{
-					if (mInterstitialAd.isLoaded()) 
+					if (mInterstitialAd.isLoaded())
 					{
 						interstitialLoaded = true;
 						Log.d("AdActivity", "Interstitial is loaded: " + interstitialLoaded);
@@ -534,11 +534,11 @@ public class AdActivity extends GameActivity {
 			}
 		});
 	}
-	
+
 	public boolean isInterstitialLoaded()
 	{
 		Log.d("AdActivity", "isInterstitialLoaded");
-		
+
 		//WORKAROUND: runOnUiThread finishes after the return of this function, then interstitialLoaded could be wrong!
 		if (interstitialLoaded)
 		{
@@ -548,9 +548,9 @@ public class AdActivity extends GameActivity {
 		updateInterstitialState();
 		return false;
 	}
-	
-	
-	public void showInterstitial() 
+
+
+	public void showInterstitial()
 	{
 		Log.d("AdActivity", "showInterstitial");
 
@@ -567,7 +567,7 @@ public class AdActivity extends GameActivity {
 						mInterstitialAd.show();
 						Log.d("AdActivity", "Ad loaded!, showing...");
 					}
-					else 
+					else
 					{
 						Log.d("AdActivity", "Ad is NOT loaded!, skipping.");
 					}
@@ -575,20 +575,20 @@ public class AdActivity extends GameActivity {
 			}
 		});
 	}
-	
-	public void requestRewardedAd(final String adID) 
+
+	public void requestRewardedAd(final String adID)
 	{
 		Log.d("AdActivity", "requestRewardedAd");
 		if (!hasRewardedVideo)
 		{
 			hasRewardedVideo = true;
 		}
-		
+
 		runOnUiThread(new Runnable(){
 			@Override
-			public void run() 
+			public void run()
 			{
-				mRewardedAd.loadAd("ca-app-pub-3940256099942544/5224354917", new AdRequest.Builder()
+				mRewardedAd.loadAd(adID, new AdRequest.Builder()
 				.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
 				.build());
 			}
