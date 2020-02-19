@@ -79,6 +79,7 @@ public class AdActivity extends GameActivity {
 	private boolean bannerHasFinishedLoading = false;
 	private boolean bannerCreated = false;
 	private String bannerPosition;
+	private String bannerAdID = "TOP_SECRET";
 	
 	//Interstitial stuff
 	private InterstitialAd mInterstitialAd;
@@ -296,7 +297,7 @@ public class AdActivity extends GameActivity {
     public void onResume() {
       super.onResume();
 	  if (hasBanner) {
-			createBanner("TOP_SECRET",bannerPosition);
+			createBanner(bannerAdID,bannerPosition);
 			Log.d("AdActivity","OnResume");
 		}
     }
@@ -305,6 +306,7 @@ public class AdActivity extends GameActivity {
 	public void createBanner(final String adID,final String position)
 	{
 		bannerPosition = position;
+		bannerAdID = adID;
 		runOnUiThread(new Runnable(){
 			@Override
 			public void run() { 
