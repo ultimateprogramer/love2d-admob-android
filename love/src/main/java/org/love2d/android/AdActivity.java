@@ -65,6 +65,7 @@ public class AdActivity extends GameActivity {
 	private boolean collectConsent = true; //CONFIG for GPDR consent 
 	private String publisherID = "pub-3940256099942544"; //For consent (Like "pub-3940256099942544")
 	private String privacyURL = "http://YOUR-PRIVACY-POLICY-URL.com"; // For consent
+	private List<String> testDeviceIds = Arrays.asList("ADA731604F5401EE072CB80DD9459283");
 	//REMEMBER TO SET UP YOUR TEST DEVICE ID!
 	//TO UNHIDE THE STATUS BAR, OPEN SDLACTIVITY.JAVA AND UNCOMMENT THE LINES 423 AND 425 (setWindowStyle(false); AND getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(this);)
 	
@@ -244,7 +245,7 @@ public class AdActivity extends GameActivity {
 				}
 			});
 		}
-		//END CONSENT 
+		//END CONSENT
 
 		if (appID.equals("INSERT-YOUR-APP-ID-HERE"))
 		{
@@ -255,16 +256,16 @@ public class AdActivity extends GameActivity {
 		{
 			Log.d("AdActivity","Initializing SDK with appID");
 			MobileAds.initialize(this, appID);
-		}	
-		
-		List<String> testDeviceIds = Arrays.asList("33BE2250B43518CCDA7DE426D04EE231");
-		RequestConfiguration configuration =
-			new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-		MobileAds.setRequestConfiguration(configuration);
+		}
 
+		//RequestConfiguration configuration =
+		//		new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+		//MobileAds.setRequestConfiguration(configuration);
 		
 		createRewardedVideo();
 	}
+
+
 
 	@Override
 	protected void onStart() {
@@ -301,8 +302,7 @@ public class AdActivity extends GameActivity {
 			Log.d("AdActivity","OnResume");
 		}
     }
-	
-	
+
 	public void createBanner(final String adID,final String position)
 	{
 		bannerPosition = position;
@@ -323,8 +323,12 @@ public class AdActivity extends GameActivity {
 					*/
 					mAdView.setAdSize(AdSize.SMART_BANNER);
 
-
-					adRequest = new AdRequest.Builder()
+					AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+					for (String s : testDeviceIds)
+					{
+						adRequestBuilder.addTestDevice(s);
+					}
+					adRequest = adRequestBuilder
 					.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
 					.build();
 					mAdView.loadAd(adRequest);
@@ -465,9 +469,15 @@ public class AdActivity extends GameActivity {
 				mInterstitialAd = new InterstitialAd(mSingleton);
 				mInterstitialAd.setAdUnitId(adID);
 
-				AdRequest adRequest = new AdRequest.Builder()
-				.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
-				.build();
+				AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+				for (String s : testDeviceIds)
+				{
+					adRequestBuilder.addTestDevice(s);
+				}
+
+				AdRequest adRequest = adRequestBuilder
+					.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
+					.build();
 				mInterstitialAd.loadAd(adRequest);
 
 				mInterstitialAd.setAdListener(new AdListener()
@@ -590,7 +600,13 @@ public class AdActivity extends GameActivity {
 			@Override
 			public void run()
 			{
-				mRewardedAd.loadAd(adID, new AdRequest.Builder()
+				AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+				for (String s : testDeviceIds)
+				{
+					adRequestBuilder.addTestDevice(s);
+				}
+
+				mRewardedAd.loadAd(adID, adRequestBuilder
 				.addNetworkExtrasBundle(AdMobAdapter.class, adExtras)
 				.build());
 			}
