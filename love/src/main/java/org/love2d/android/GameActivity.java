@@ -95,8 +95,10 @@ public class GameActivity extends SDLActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         if (android.os.Build.VERSION.SDK_INT >= 28) {
-            //getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES; //Edit by bio1712
+            getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES; //Edit by bio1712
         }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
     @Override
